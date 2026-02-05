@@ -102,7 +102,6 @@ A query de claim ordena por status para priorizar **pending → error**.
 ### Pré-requisitos
 
 - Docker e Docker Compose
-- (Opcional) DBeaver/pgAdmin para inspecionar o Postgres
 
 ### 1) Subir containers
 
@@ -117,8 +116,6 @@ docker compose run --rm app composer install
 ```
 
 ### 3) Configurar `.env`
-
-Garanta que o `.env` (ou `.env.example` copiado para `.env`) tenha:
 
 ```env
 DB_CONNECTION=pgsql
