@@ -16,7 +16,7 @@ Este projeto implementa um **worker de importação de produtos via CSV** que l�
 - O worker é executado via: `php artisan products:import`
 - Em produção, basta agendar esse comando a cada **10 minutos** (ex.: cron).
 
-### Múltiplas instâncias em paralelo (concorrência)
+### Múltiplas instâncias em paralelo
 
 - O “claim” de arquivos usa **PostgreSQL** com:
   - `FOR UPDATE SKIP LOCKED`
@@ -36,22 +36,22 @@ Este projeto implementa um **worker de importação de produtos via CSV** que l�
 - Importação usa `upsert` (insert/update) por `external_id`, então:
   - o mesmo produto pode aparecer em arquivos diferentes sem duplicar.
 
-### Falhas e erros
+### Falhas
 
-#### Erro por linha não aborta o arquivo
+#### Erros
 
 - Linhas inválidas são registradas em `import_errors` e o processamento continua.
 
-#### Erro fatal do arquivo
+#### Erros fatais
 
 - Ex.: **header inválido** → marca o arquivo como `error` e salva `last_error`.
 
-#### Reprocessamento futuro
+#### Reprocessamento
 
 - Arquivos em `error` podem ser reprocessados em execuções futuras.
 - Para evitar loop infinito com arquivo “quebrado para sempre”, foi aplicado **limite de tentativas** (`MAX_ATTEMPTS`).
 
-### Processamento em lote
+### Processamento
 
 - O parse é streaming e o `upsert` é feito em **lotes** (`batchSize=1000`), adequado para centenas de arquivos.
 
@@ -64,7 +64,7 @@ Este projeto implementa um **worker de importação de produtos via CSV** que l�
 
 ## Decisões de arquitetura
 
-### Organização por responsabilidades
+### Responsabilidades
 
 - **Worker**: orquestra o fluxo (descobrir → claim → processar → marcar status)
 - **Repositories**:
@@ -74,11 +74,11 @@ Este projeto implementa um **worker de importação de produtos via CSV** que l�
 - **Parser**:
   - `CsvProductFileParser`: valida e mapeia linhas do CSV, gera batches
 
-### Por que `FOR UPDATE SKIP LOCKED`?
+### `FOR UPDATE SKIP LOCKED`
 
-É uma técnica robusta do Postgres para **consumo concorrente** de “tarefas” (neste caso, arquivos a processar), permitindo N instâncias do worker sem colisões.
+É uma técnica do Postgres para **consumo concorrente** de “tarefas” (neste caso, arquivos a processar), permitindo N instâncias do worker sem conflitos.
 
-### Por que priorizar `pending` antes de `error`?
+### Priorização
 
 Sem priorização, um arquivo permanentemente inválido em `error` poderia ser reprocessado infinitamente e **starvar** arquivos novos (`pending`).  
 A query de claim ordena por status para priorizar **pending → error**.
