@@ -1,0 +1,16 @@
+external_id;name;price;stock;active
+E200;Produto OK 1;10.00;5;true
+E201;Produto OK 2;99.90;0;false
+
+;Sem external_id;25.00;10;true
+E203;;25.00;10;true
+E204;Preco Zero;0;10;true
+E205;Preco Negativo;-5.00;10;true
+E206;Preco Texto;abc;10;true
+E207;Stock Negativo;10.00;-1;true
+E208;Stock Decimal;10.00;2.5;true
+E209;Stock Texto;10.00;dez;true
+E210;Active Invalido;10.00;10;yes
+E211;Colunas a menos;10.00;10
+E212;Colunas a mais;10.00;10;true;EXTRA
+E213;Produto OK 3;15.50;12;true

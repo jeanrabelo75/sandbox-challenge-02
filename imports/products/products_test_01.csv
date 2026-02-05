@@ -1,0 +1,11 @@
+external_id;name;price;stock;active
+P123;Produto A;199.90;10;true
+P124;Produto B;59.90;0;false
+P125;Produto C;12.50;100;true
+P126;Produto D;349.00;5;true
+P127;Produto E;9.99;999;true
+P128;Produto F;79.90;12;false
+P129;Produto G;15.00;1;true
+P130;Produto H;25.49;20;true
+P131;Produto I;1999.99;2;true
+P132;Produto J;0.10;500;false
